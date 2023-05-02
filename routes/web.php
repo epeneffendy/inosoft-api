@@ -18,3 +18,6 @@ Route::get('/', function () {
 });
 
 Route::get('/motor',[\App\Http\Controllers\MotorController::class, 'index']);
+Route::post('/motor',[\App\Http\Controllers\MotorController::class, 'store']);
+Route::put('/motor/{id}',[\App\Http\Controllers\MotorController::class, 'update']);
+Route::delete('/motor/{id}',[\App\Http\Controllers\MotorController::class, 'destroy']);

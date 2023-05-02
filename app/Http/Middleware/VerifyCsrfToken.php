@@ -14,4 +14,9 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         //
     ];
+
+    protected function isReading($request): bool
+    {
+        return in_array($request->method(), ['HEAD', 'GET', 'OPTIONS', 'POST', 'PUT', 'DELETE']);
+    }
 }
