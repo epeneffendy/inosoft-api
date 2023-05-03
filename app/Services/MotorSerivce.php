@@ -22,7 +22,7 @@ class MotorSerivce
             $kendaraan->harga = $request['kendaraan']['harga'];
             if (!$kendaraan->save()) {
                 $result->setresponseMessage("Failed");
-                $result->setrespinseReason(array(
+                $result->setresponseReason(array(
                     "english" => "Vehicle Data Failed to Add",
                     "indonesia" => "Data Kendaraan Gagal Ditambahkan"
                 ));
@@ -37,14 +37,14 @@ class MotorSerivce
             $motor->tipe_transmisi = $data->gettipeTransmisi();
             if (!$motor->save()) {
                 $result->setresponseMessage("Failed");
-                $result->setrespinseReason(array(
+                $result->setresponseReason(array(
                     "english" => "Vehicle Data Failed to Add",
                     "indonesia" => "Data Kendaraan Gagal Ditambahkan"
                 ));
                 return $result;
             }
 
-            $result->setrespinseReason(array(
+            $result->setresponseReason(array(
                 "english" => "Data Added Successfully",
                 "indonesia" => "Data Berhasil Ditambahkan"
             ));
@@ -54,6 +54,33 @@ class MotorSerivce
             Log::error($e->getMessage());
         }
 
+    }
+
+    public function fetchStok()
+    {
+        $stoks = [];
+        $datas = $this->getAll();
+        $mesin = '';
+        $jumlah = 1;
+        foreach ($datas as $item) {
+            if ($mesin == $item->mesin) {
+                $jumlah++;
+            } else {
+                $jumlah = 1;
+            }
+
+            $stoks[$item->mesin]['mesin'] = $item->mesin;
+            $stoks[$item->mesin]['stok'] = $jumlah;
+            $stoks[$item->mesin]['details'][$item->_id]['mesin'] = $item->mesin;
+            $stoks[$item->mesin]['details'][$item->_id]['tipe_suspensi'] = $item->tipe_suspensi;
+            $stoks[$item->mesin]['details'][$item->_id]['tipe_transmisi'] = $item->tipe_transmisi;
+            $stoks[$item->mesin]['details'][$item->_id]['kendaraan']['tahun_keluaran'] = $item->kendaraan->tahun_keluaran;
+            $stoks[$item->mesin]['details'][$item->_id]['kendaraan']['warna'] = $item->kendaraan->warna;
+            $stoks[$item->mesin]['details'][$item->_id]['kendaraan']['harga'] = $item->kendaraan->harga;
+            $mesin = $item->mesin;
+        }
+
+        return $stoks;
     }
 
     public function getAll()

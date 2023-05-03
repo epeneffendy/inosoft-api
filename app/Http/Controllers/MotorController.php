@@ -189,6 +189,7 @@ class MotorController extends Controller
         $data_motor = [];
         if ($show){
             $data_motor[$datas->_id]['_id'] = $datas->_id;
+            $data_motor[$datas->_id]['mesin'] = $datas->mesin;
             $data_motor[$datas->_id]['tipe_suspensi'] = $datas->tipe_suspensi;
             $data_motor[$datas->_id]['tipe_transmisi'] = $datas->tipe_transmisi;
             if (isset($datas->kendaraan)) {
@@ -201,6 +202,7 @@ class MotorController extends Controller
         }else{
             foreach ($datas as $item) {
                 $data_motor[$item->_id]['_id'] = $item->_id;
+                $data_motor[$item->_id]['mesin'] = $item->mesin;
                 $data_motor[$item->_id]['tipe_suspensi'] = $item->tipe_suspensi;
                 $data_motor[$item->_id]['tipe_transmisi'] = $item->tipe_transmisi;
                 if (isset($item->kendaraan)) {

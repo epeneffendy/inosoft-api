@@ -14,8 +14,8 @@ class KendaraanMotorResponse extends \stdClass
         "indonesia" => "Sukses"
     );
     private $mesin = "";
-    private $kapasitasPenumpang = "";
-    private $tipe = "";
+    private $tipeSuspensi = "";
+    private $tipeTransmisi = "";
     private $kendaraan = array(
         "tahun_kendaraan"=>'',
         "warna"=>'',
