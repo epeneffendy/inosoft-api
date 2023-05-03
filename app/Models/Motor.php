@@ -4,10 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Jenssegers\Mongodb\Eloquent\Model;
-use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
 
-class Motor extends Eloquent
+class Motor extends Model
 {
     use HasFactory;
     protected $connection = 'mongodb';
@@ -15,6 +14,6 @@ class Motor extends Eloquent
 
     public function kendaraan()
     {
-        return $this->embedsOne('Kendaraan');
+        return $this->belongsTo(Kendaraan::class);
     }
 }
