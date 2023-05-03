@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kendaraan;
 use App\Models\KendaraanMotorRequest;
 use App\Models\KendaraanMotorResponse;
-use App\Models\Motor;
 use App\Services\KendaraanService;
 use App\Services\MotorSerivce;
 use Illuminate\Http\Request;
@@ -102,7 +100,7 @@ class MotorController extends Controller
 
             $motor = $motorSerivce->findById($id);
             if (isset($motor)) {
-                $result = $motorSerivce->storeMotor($data, $result, $request->all(), $motor, 'update');
+                $result = $motorSerivce->storeMotor($data, $result, $request->all(), 'update', $motor);
             } else {
                 $result->setresponseMessage("Failed");
                 $result->setresponseReason(array(
@@ -148,8 +146,8 @@ class MotorController extends Controller
                 'responseCode' => 200,
                 'responseMessage' => 'Failed',
                 'responseReason' => [
-                    "english" => "Data Failed to Delete",
-                    "indonesia" => "Data Gagal Dihapus"
+                    "english" => "Data Not Found",
+                    "indonesia" => "Data Tidak Ditemukan"
                 ]
             ];
         }

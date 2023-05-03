@@ -10,11 +10,9 @@ use Illuminate\Support\Facades\Log;
 
 class MobilSerivce
 {
-    public function storeMobil(KendaraanMobilRequest $data, KendaraanMobilResponse $result, $request, $mobil = null, $slug)
+    public function storeMobil(KendaraanMobilRequest $data, KendaraanMobilResponse $result, $request, $slug, $mobil = null)
     {
-        dd($request);
         try {
-            dd("ASdasd");
             $kendaraan = new Kendaraan();
             if ($slug == 'update') {
                 $kendaraan = Kendaraan::where('_id', '=', $mobil->kendaraan->_id)->first();
@@ -35,7 +33,7 @@ class MobilSerivce
             }
             $mobil->kendaraan_id = $kendaraan->_id;
             $mobil->mesin = $data->getmesin();
-            $mobil->kapasitasPenumpang = $data->getkapasitasPenumpang();
+            $mobil->kapasitas_penumpang = $data->getkapasitasPenumpang();
             $mobil->tipe = $data->gettipe();
             if (!$mobil->save()) {
                 $result->setresponseMessage("Failed");

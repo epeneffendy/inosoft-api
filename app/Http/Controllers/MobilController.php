@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\KendaraanMobilRequest;
 use App\Models\KendaraanMobilResponse;
+use App\Models\Mobil;
+use App\Services\KendaraanService;
 use App\Services\MobilSerivce;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -44,7 +46,7 @@ class MobilController extends Controller
     {
         $validator = validator($request->all(), [
             'mesin' => ['required', 'string', 'max:20'],
-            'kapasitasPenumpang' => ['required', 'numeric', 'size:10'],
+            'kapasitasPenumpang' => ['required', 'numeric'],
             'tipe' => ['required', 'string', 'max:20'],
             'kendaraan' => ['array']
         ], [], [
@@ -76,28 +78,27 @@ class MobilController extends Controller
         }
     }
 
-    public function update(Request $request, MotorSerivce $motorSerivce, $id)
+    public function update(Request $request, MobilSerivce $mobilSerivce, $id)
     {
         $validator = validator($request->all(), [
             'mesin' => ['required', 'string', 'max:20'],
-            'tipeSuspensi' => ['required', 'string', 'max:20'],
-            'tipeTransmisi' => ['required', 'string', 'max:20'],
+            'kapasitasPenumpang' => ['required', 'numeric'],
+            'tipe' => ['required', 'string', 'max:20'],
             'kendaraan' => ['array']
         ], [], [
             'mesin' => 'Mesin',
-            'tipeSuspensi' => 'Tipe Suspensi',
-            'tipeTransmisi' => 'Tipe Transmisi',
-
+            'kapasitasPenumpang' => 'Tipe Penumpang',
+            'tipe' => 'Tipe',
         ]);
 
         try {
             $param = $validator->validated();
-            $data = new KendaraanMotorRequest($request->all());
-            $result = new KendaraanMotorResponse($request->all());
+            $data = new KendaraanMobilRequest($request->all());
+            $result = new KendaraanMobilResponse($request->all());
 
-            $motor = $motorSerivce->findById($id);
-            if (isset($motor)) {
-                $result = $motorSerivce->storeMotor($data, $result, $request->all(), $motor, 'update');
+            $mobil = $mobilSerivce->findById($id);
+            if (isset($mobil)) {
+                $result = $mobilSerivce->storeMobil($data, $result, $request->all(), 'update', $mobil);
             } else {
                 $result->setresponseMessage("Failed");
                 $result->setresponseReason(array(
@@ -123,12 +124,12 @@ class MobilController extends Controller
         }
     }
 
-    public function destroy(MotorSerivce $motorSerivce, KendaraanService $kendaraanService, $id)
+    public function destroy(MobilSerivce $mobilSerivce, KendaraanService $kendaraanService, $id)
     {
-        $motor = $motorSerivce->findById($id);
-        if (isset($motor)) {
-            $kendaraanService->delete($motor->kendaraan->_id);
-            $motorSerivce->delete($id);
+        $mobil = $mobilSerivce->findById($id);
+        if (isset($mobil)) {
+            $kendaraanService->delete($mobil->kendaraan->_id);
+            $mobilSerivce->delete($id);
 
             $response = [
                 'responseCode' => 200,
@@ -143,19 +144,19 @@ class MobilController extends Controller
                 'responseCode' => 200,
                 'responseMessage' => 'Failed',
                 'responseReason' => [
-                    "english" => "Data Failed to Delete",
-                    "indonesia" => "Data Gagal Dihapus"
+                    "english" => "Data Not Found",
+                    "indonesia" => "Data Tidak Ditemukan"
                 ]
             ];
         }
         return response()->json($response, 200);
     }
 
-    public function show(MotorSerivce $motorSerivce, $id)
+    public function show(MobilSerivce $mobilSerivce, $id)
     {
-        $motor = $motorSerivce->findById($id);
-        if (isset($motor)) {
-            $data_motor = $this->arr_data($motor, true);
+        $mobil = $mobilSerivce->findById($id);
+        if (isset($mobilSerivce)) {
+            $data_mobil = $this->arr_data($mobil, true);
 
             $response = [
                 'responseCode' => 200,
@@ -164,7 +165,7 @@ class MobilController extends Controller
                     "english" => "Success",
                     "indonesia" => "Sukses"
                 ],
-                'data' => $data_motor,
+                'data' => $data_mobil,
             ];
         } else {
             $response = [
@@ -186,8 +187,9 @@ class MobilController extends Controller
         $data_motor = [];
         if ($show){
             $data_motor[$datas->_id]['_id'] = $datas->_id;
-            $data_motor[$datas->_id]['tipe_suspensi'] = $datas->tipe_suspensi;
-            $data_motor[$datas->_id]['tipe_transmisi'] = $datas->tipe_transmisi;
+            $data_motor[$datas->_id]['menis'] = $datas->mesin;
+            $data_motor[$datas->_id]['kapasitas_penumpang'] = $datas->kapasitas_penumpang;
+            $data_motor[$datas->_id]['tipe'] = $datas->tipe;
             if (isset($datas->kendaraan)) {
                 $data_motor[$datas->_id]['kendaraan']['tahun_keluaran'] = $datas->kendaraan->tahun_keluaran;
                 $data_motor[$datas->_id]['kendaraan']['warna'] = $datas->kendaraan->warna;
@@ -198,8 +200,9 @@ class MobilController extends Controller
         }else{
             foreach ($datas as $item) {
                 $data_motor[$item->_id]['_id'] = $item->_id;
-                $data_motor[$item->_id]['tipe_suspensi'] = $item->tipe_suspensi;
-                $data_motor[$item->_id]['tipe_transmisi'] = $item->tipe_transmisi;
+                $data_motor[$item->_id]['mesin'] = $item->mesin;
+                $data_motor[$item->_id]['kapasitas_penumpang'] = $item->kapasitas_penumpang;
+                $data_motor[$item->_id]['tipe'] = $item->tipe;
                 if (isset($item->kendaraan)) {
                     $data_motor[$item->_id]['kendaraan']['tahun_keluaran'] = $item->kendaraan->tahun_keluaran;
                     $data_motor[$item->_id]['kendaraan']['warna'] = $item->kendaraan->warna;

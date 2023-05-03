@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 class MotorSerivce
 {
-    public function storeMotor(KendaraanMotorRequest $data, KendaraanMotorResponse $result, $request, $motor = null, $slug)
+    public function storeMotor(KendaraanMotorRequest $data, KendaraanMotorResponse $result, $request, $slug, $motor = null)
     {
         try {
             $kendaraan = new Kendaraan();
