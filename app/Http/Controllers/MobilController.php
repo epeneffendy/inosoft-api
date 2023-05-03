@@ -45,11 +45,13 @@ class MobilController extends Controller
     public function store(Request $request, MobilSerivce $mobilSerivce)
     {
         $validator = validator($request->all(), [
+            'merk' => ['required', 'string', 'max:20'],
             'mesin' => ['required', 'string', 'max:20'],
             'kapasitasPenumpang' => ['required', 'numeric'],
             'tipe' => ['required', 'string', 'max:20'],
             'kendaraan' => ['array']
         ], [], [
+            'merk' => 'Merk',
             'mesin' => 'Mesin',
             'kapasitasPenumpang' => 'Tipe Penumpang',
             'tipe' => 'Tipe',
@@ -187,9 +189,11 @@ class MobilController extends Controller
         $data_motor = [];
         if ($show){
             $data_motor[$datas->_id]['_id'] = $datas->_id;
-            $data_motor[$datas->_id]['menis'] = $datas->mesin;
+            $data_motor[$datas->_id]['merk'] = $datas->merk;
+            $data_motor[$datas->_id]['mesin'] = $datas->mesin;
             $data_motor[$datas->_id]['kapasitas_penumpang'] = $datas->kapasitas_penumpang;
             $data_motor[$datas->_id]['tipe'] = $datas->tipe;
+            $data_motor[$datas->_id]['status'] = $datas->status;
             if (isset($datas->kendaraan)) {
                 $data_motor[$datas->_id]['kendaraan']['tahun_keluaran'] = $datas->kendaraan->tahun_keluaran;
                 $data_motor[$datas->_id]['kendaraan']['warna'] = $datas->kendaraan->warna;
@@ -200,9 +204,11 @@ class MobilController extends Controller
         }else{
             foreach ($datas as $item) {
                 $data_motor[$item->_id]['_id'] = $item->_id;
+                $data_motor[$item->_id]['merk'] = $item->merk;
                 $data_motor[$item->_id]['mesin'] = $item->mesin;
                 $data_motor[$item->_id]['kapasitas_penumpang'] = $item->kapasitas_penumpang;
                 $data_motor[$item->_id]['tipe'] = $item->tipe;
+                $data_motor[$item->_id]['status'] = $item->status;
                 if (isset($item->kendaraan)) {
                     $data_motor[$item->_id]['kendaraan']['tahun_keluaran'] = $item->kendaraan->tahun_keluaran;
                     $data_motor[$item->_id]['kendaraan']['warna'] = $item->kendaraan->warna;

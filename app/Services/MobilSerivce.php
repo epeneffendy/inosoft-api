@@ -32,9 +32,11 @@ class MobilSerivce
                 $mobil = new Mobil();
             }
             $mobil->kendaraan_id = $kendaraan->_id;
+            $mobil->merk = $data->getmerk();
             $mobil->mesin = $data->getmesin();
             $mobil->kapasitas_penumpang = $data->getkapasitasPenumpang();
             $mobil->tipe = $data->gettipe();
+            $mobil->status = $result->getstatus();
             if (!$mobil->save()) {
                 $result->setresponseMessage("Failed");
                 $result->setresponseReason(array(
@@ -59,33 +61,39 @@ class MobilSerivce
     public function fetchStok()
     {
         $stoks = [];
-        $datas = $this->getAll();
+        $datas = $this->getAllAvailable();
+
         $mesin = '';
         $jumlah = 1;
         foreach ($datas as $item) {
-            if ($mesin == $item->mesin) {
+            if ($mesin == $item->merk) {
                 $jumlah++;
             } else {
                 $jumlah = 1;
             }
 
-            $stoks[$item->mesin]['mesin'] = $item->mesin;
-            $stoks[$item->mesin]['stok'] = $jumlah;
-            $stoks[$item->mesin]['details'][$item->_id]['mesin'] = $item->mesin;
-            $stoks[$item->mesin]['details'][$item->_id]['kapasitas_penumpang'] = $item->kapasitas_penumpang;
-            $stoks[$item->mesin]['details'][$item->_id]['tipe'] = $item->tipe;
-            $stoks[$item->mesin]['details'][$item->_id]['kendaraan']['tahun_keluaran'] = $item->kendaraan->tahun_keluaran;
-            $stoks[$item->mesin]['details'][$item->_id]['kendaraan']['warna'] = $item->kendaraan->warna;
-            $stoks[$item->mesin]['details'][$item->_id]['kendaraan']['harga'] = $item->kendaraan->harga;
-            $mesin = $item->mesin;
+            $stoks[$item->merk]['merk'] = $item->merk;
+            $stoks[$item->merk]['stok'] = $jumlah;
+            $stoks[$item->merk]['details'][$item->_id]['mesin'] = $item->mesin;
+            $stoks[$item->merk]['details'][$item->_id]['kapasitas_penumpang'] = $item->kapasitas_penumpang;
+            $stoks[$item->merk]['details'][$item->_id]['tipe'] = $item->tipe;
+            $stoks[$item->merk]['details'][$item->_id]['kendaraan']['tahun_keluaran'] = $item->kendaraan->tahun_keluaran;
+            $stoks[$item->merk]['details'][$item->_id]['kendaraan']['warna'] = $item->kendaraan->warna;
+            $stoks[$item->merk]['details'][$item->_id]['kendaraan']['harga'] = $item->kendaraan->harga;
+            $mesin = $item->merk;
         }
-
         return $stoks;
     }
 
     public function getAll()
     {
         $data = Mobil::all();
+        return $data;
+    }
+
+    public function getAllAvailable()
+    {
+        $data = Mobil::where('status', '=', 'Available')->get();
         return $data;
     }
 

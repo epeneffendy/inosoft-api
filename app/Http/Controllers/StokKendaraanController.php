@@ -16,7 +16,7 @@ class StokKendaraanController extends Controller
             $datas = $motorSerivce->fetchStok();
         }
 
-        if (count($datas) > 1){
+        if (count($datas) >= 1){
             $response = [
                 'responseCode' => 200,
                 'responseMessage' => 'Successful',
@@ -31,7 +31,7 @@ class StokKendaraanController extends Controller
                 'responseCode' => 200,
                 'responseMessage' => 'Failed',
                 'responseReason' => [
-                    "english" => "Data Not Found",
+                    "english" => "Data Not Foundsss",
                     "indonesia" => "Data Tidak Ditemukan"
                 ],
                 'data' => [],

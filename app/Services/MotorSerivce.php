@@ -32,9 +32,11 @@ class MotorSerivce
                 $motor = new Motor();
             }
             $motor->kendaraan_id = $kendaraan->_id;
+            $motor->merk = $data->getmerk();
             $motor->mesin = $data->getmesin();
             $motor->tipe_suspensi = $data->gettipeSuspensi();
             $motor->tipe_transmisi = $data->gettipeTransmisi();
+            $motor->status = $result->getstatus();
             if (!$motor->save()) {
                 $result->setresponseMessage("Failed");
                 $result->setresponseReason(array(
@@ -59,25 +61,25 @@ class MotorSerivce
     public function fetchStok()
     {
         $stoks = [];
-        $datas = $this->getAll();
+        $datas = $this->getAllAvailable();
         $mesin = '';
         $jumlah = 1;
         foreach ($datas as $item) {
-            if ($mesin == $item->mesin) {
+            if ($mesin == $item->merk) {
                 $jumlah++;
             } else {
                 $jumlah = 1;
             }
 
-            $stoks[$item->mesin]['mesin'] = $item->mesin;
-            $stoks[$item->mesin]['stok'] = $jumlah;
-            $stoks[$item->mesin]['details'][$item->_id]['mesin'] = $item->mesin;
-            $stoks[$item->mesin]['details'][$item->_id]['tipe_suspensi'] = $item->tipe_suspensi;
-            $stoks[$item->mesin]['details'][$item->_id]['tipe_transmisi'] = $item->tipe_transmisi;
-            $stoks[$item->mesin]['details'][$item->_id]['kendaraan']['tahun_keluaran'] = $item->kendaraan->tahun_keluaran;
-            $stoks[$item->mesin]['details'][$item->_id]['kendaraan']['warna'] = $item->kendaraan->warna;
-            $stoks[$item->mesin]['details'][$item->_id]['kendaraan']['harga'] = $item->kendaraan->harga;
-            $mesin = $item->mesin;
+            $stoks[$item->merk]['merk'] = $item->merk;
+            $stoks[$item->merk]['stok'] = $jumlah;
+            $stoks[$item->merk]['details'][$item->_id]['mesin'] = $item->mesin;
+            $stoks[$item->merk]['details'][$item->_id]['tipe_suspensi'] = $item->tipe_suspensi;
+            $stoks[$item->merk]['details'][$item->_id]['tipe_transmisi'] = $item->tipe_transmisi;
+            $stoks[$item->merk]['details'][$item->_id]['kendaraan']['tahun_keluaran'] = $item->kendaraan->tahun_keluaran;
+            $stoks[$item->merk]['details'][$item->_id]['kendaraan']['warna'] = $item->kendaraan->warna;
+            $stoks[$item->merk]['details'][$item->_id]['kendaraan']['harga'] = $item->kendaraan->harga;
+            $mesin = $item->merk;
         }
 
         return $stoks;
@@ -86,6 +88,12 @@ class MotorSerivce
     public function getAll()
     {
         $data = Motor::all();
+        return $data;
+    }
+
+    public function getAllAvailable()
+    {
+        $data = Motor::where('status', '=', 'Available')->all();
         return $data;
     }
 

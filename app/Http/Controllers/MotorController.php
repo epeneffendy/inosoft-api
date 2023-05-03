@@ -45,11 +45,13 @@ class MotorController extends Controller
     public function store(Request $request, MotorSerivce $motorSerivce)
     {
         $validator = validator($request->all(), [
+            'merk' => ['required', 'string', 'max:20'],
             'mesin' => ['required', 'string', 'max:20'],
             'tipeSuspensi' => ['required', 'string', 'max:20'],
             'tipeTransmisi' => ['required', 'string', 'max:20'],
             'kendaraan' => ['array']
         ], [], [
+            'merk' => 'Merk',
             'mesin' => 'Mesin',
             'tipeSuspensi' => 'Tipe Suspensi',
             'tipeTransmisi' => 'Tipe Transmisi',
@@ -82,6 +84,7 @@ class MotorController extends Controller
     public function update(Request $request, MotorSerivce $motorSerivce, $id)
     {
         $validator = validator($request->all(), [
+            'merk' => ['required', 'string', 'max:20'],
             'mesin' => ['required', 'string', 'max:20'],
             'tipeSuspensi' => ['required', 'string', 'max:20'],
             'tipeTransmisi' => ['required', 'string', 'max:20'],
@@ -189,9 +192,11 @@ class MotorController extends Controller
         $data_motor = [];
         if ($show){
             $data_motor[$datas->_id]['_id'] = $datas->_id;
+            $data_motor[$datas->_id]['merk'] = $datas->merk;
             $data_motor[$datas->_id]['mesin'] = $datas->mesin;
             $data_motor[$datas->_id]['tipe_suspensi'] = $datas->tipe_suspensi;
             $data_motor[$datas->_id]['tipe_transmisi'] = $datas->tipe_transmisi;
+            $data_motor[$datas->_id]['status'] = $datas->status;
             if (isset($datas->kendaraan)) {
                 $data_motor[$datas->_id]['kendaraan']['tahun_keluaran'] = $datas->kendaraan->tahun_keluaran;
                 $data_motor[$datas->_id]['kendaraan']['warna'] = $datas->kendaraan->warna;
@@ -202,9 +207,11 @@ class MotorController extends Controller
         }else{
             foreach ($datas as $item) {
                 $data_motor[$item->_id]['_id'] = $item->_id;
+                $data_motor[$item->_id]['merk'] = $item->merk;
                 $data_motor[$item->_id]['mesin'] = $item->mesin;
                 $data_motor[$item->_id]['tipe_suspensi'] = $item->tipe_suspensi;
                 $data_motor[$item->_id]['tipe_transmisi'] = $item->tipe_transmisi;
+                $data_motor[$item->_id]['status'] = $item->status;
                 if (isset($item->kendaraan)) {
                     $data_motor[$item->_id]['kendaraan']['tahun_keluaran'] = $item->kendaraan->tahun_keluaran;
                     $data_motor[$item->_id]['kendaraan']['warna'] = $item->kendaraan->warna;

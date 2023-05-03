@@ -13,9 +13,11 @@ class KendaraanMobilResponse extends \stdClass
         "english" => "Success",
         "indonesia" => "Sukses"
     );
+    private $merk = "";
     private $mesin = "";
     private $kapasitasPenumpang = "";
     private $tipe = "";
+    private $status = "Available";
     private $kendaraan = array(
         "tahun_kendaraan"=>'',
         "warna"=>'',
@@ -40,6 +42,16 @@ class KendaraanMobilResponse extends \stdClass
             $response[$name] = $value;
         }
         return $response;
+    }
+
+    public function getmerk()
+    {
+        return $this->merk;
+    }
+
+    public function setmerk($merk): void
+    {
+        $this->merk = $merk;
     }
 
     public function getmesin()
@@ -70,6 +82,16 @@ class KendaraanMobilResponse extends \stdClass
     public function settipe($tipe): void
     {
         $this->tipe = $tipe;
+    }
+
+    public function getstatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setstatus($status): void
+    {
+        $this->status = $status;
     }
 
     public function getkendaraan(): Collection
