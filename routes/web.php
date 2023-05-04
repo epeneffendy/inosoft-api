@@ -28,3 +28,8 @@ Route::get('/mobil/{id}',[\App\Http\Controllers\MobilController::class, 'show'])
 Route::post('/mobil',[\App\Http\Controllers\MobilController::class, 'store']);
 Route::put('/mobil/{id}',[\App\Http\Controllers\MobilController::class, 'update']);
 Route::delete('/mobil/{id}',[\App\Http\Controllers\MobilController::class, 'destroy']);
+
+Route::get('/stok-kendaraan/{type}',[\App\Http\Controllers\StokKendaraanController::class, 'index']);
+
+Route::post('/penjualan-kendaraan',[\App\Http\Controllers\PenjualanController::class, 'store']);
+Route::get('/laporan-penjualan/{filter}/{value}',[\App\Http\Controllers\PenjualanController::class, 'index']);

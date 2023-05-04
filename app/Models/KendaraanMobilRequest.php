@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class KendaraanMobilRequest extends  \stdClass
 {
+    private $merk = "";
     private $mesin = "";
     private $kapasitasPenumpang = "";
     private $tipe = "";
@@ -32,6 +33,16 @@ class KendaraanMobilRequest extends  \stdClass
             $response[$name] = $value;
         }
         return $response;
+    }
+
+    public function getmerk()
+    {
+        return $this->merk;
+    }
+
+    public function setmerk($merk): void
+    {
+        $this->merk = $merk;
     }
 
     public function getmesin()
