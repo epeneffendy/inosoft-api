@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Penjualan;
 use App\Models\PenjualanKendaraanRequest;
 use App\Models\PenjualanKendaraanResponse;
 use App\Services\MobilSerivce;
@@ -61,8 +62,32 @@ class PenjualanController extends Controller
         }
     }
 
-    public function index(PenjualanService $penjualanService, $type, $value)
+    public function index(PenjualanService $penjualanService, $col, $value)
     {
-        dd($value);
+        $fetch = $penjualanService->fetchLaporan($col, $value);
+        if (count($fetch) > 0){
+            $response = [
+                'responseCode' => 200,
+                'responseMessage' => 'Successful',
+                'responseReason' => [
+                    "english" => "Success",
+                    "indonesia" => "Sukses"
+                ],
+                'data' => $fetch,
+            ];
+        }else{
+            $response = [
+                'responseCode' => 200,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Data Not Foundsss",
+                    "indonesia" => "Data Tidak Ditemukan"
+                ],
+                'data' => [],
+            ];
+        }
+        return response()->json($response, 200);
     }
+
+
 }

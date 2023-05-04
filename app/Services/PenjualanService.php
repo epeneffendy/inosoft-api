@@ -1,10 +1,11 @@
 <?php
 namespace App\Services;
 
-use App\Models\Mobil;
+use App\Models\Motor;
 use App\Models\Penjualan;
 use App\Models\PenjualanKendaraanRequest;
 use App\Models\PenjualanKendaraanResponse;
+use Carbon\Carbon;
 
 class PenjualanService
 {
@@ -137,8 +138,36 @@ class PenjualanService
         }
     }
 
-    public function fetchLaporan($type, $value)
+    public function fetchLaporan($col, $value)
     {
-//        $datas = Penjualan::where
+        if ($col == 'kendaraan_type') {
+            $model = 'App\Models\Mobil';
+            if ($value == 'motor') {
+                $model = 'App\Models\Motor';
+            }
+            $value = $model;
+        }
+
+        $datas = Penjualan::where($col, '=', $value)->get();
+
+        $report = [];
+        foreach ($datas as $item) {
+            $type = 'Motor';
+            if ($item->kendaraan_type == 'App\Models\Mobil') {
+                $type = 'Mobil';
+            }
+            $report[$item->_id]['_ids'] = $item->_id;
+            $report[$item->_id]['type'] = $type;
+            $report[$item->_id]['tanggal'] = Carbon::parse($item->tanggal)->format('d-m-Y');
+            $report[$item->_id]['detail'][$item->kendaraan->_id]['id'] = $item->kendaraan->_id;
+            $report[$item->_id]['detail'][$item->kendaraan->_id]['merk'] = $item->kendaraan->merk;
+            $report[$item->_id]['detail'][$item->kendaraan->_id]['mesin'] = $item->kendaraan->mesin;
+            $report[$item->_id]['detail'][$item->kendaraan->_id]['status'] = $item->kendaraan->status;
+            $report[$item->_id]['detail'][$item->kendaraan->_id]['kendaraan']['tahun_keluaran'] = $item->kendaraan->kendaraan->tahun_keluaran;
+            $report[$item->_id]['detail'][$item->kendaraan->_id]['kendaraan']['warna'] = $item->kendaraan->kendaraan->warna;
+            $report[$item->_id]['detail'][$item->kendaraan->_id]['kendaraan']['harga'] = $item->kendaraan->kendaraan->harga;
+        }
+
+        return $report;
     }
 }

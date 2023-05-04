@@ -32,4 +32,5 @@ Route::delete('/mobil/{id}',[\App\Http\Controllers\MobilController::class, 'dest
 Route::get('/stok-kendaraan/{type}',[\App\Http\Controllers\StokKendaraanController::class, 'index']);
 
 Route::post('/penjualan-kendaraan',[\App\Http\Controllers\PenjualanController::class, 'store']);
-Route::get('/laporan-penjualan/{filter}/{value}',[\App\Http\Controllers\PenjualanController::class, 'index']);
+Route::get('/laporan-penjualan/{col}/{value}',[\App\Http\Controllers\PenjualanController::class, 'index']);
+//Route::get('/laporan/',[\App\Http\Controllers\PenjualanController::class, 'index']);
