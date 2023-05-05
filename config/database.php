@@ -37,7 +37,7 @@ return [
 
         'mongodb' => [
             'driver' => 'mongodb',
-            'dsn' => env('DB_URI', 'mongodb+srv://effendy:effendy12345@cluster0.qbhkc0t.mongodb.net/?retryWrites=true&w=majority'),
+            'dsn' => env('DB_URI', 'mongodb://localhost:27017'),
             'database' => 'inosoft_test',
         ],
 

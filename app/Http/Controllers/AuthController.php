@@ -11,7 +11,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['token', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
         $this->guard = "api";
     }
 
@@ -36,7 +36,7 @@ class AuthController extends Controller
         return response()->json($user, 201);
     }
 
-    public function token()
+    public function login()
     {
         $credentials = request(['email', 'password']);
         if (! $token = auth($this->guard)->attempt($credentials)) {
