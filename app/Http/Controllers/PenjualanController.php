@@ -11,6 +11,8 @@ use App\Services\PenjualanService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use JWTAuth;
+use MongoDB\Driver\Exception\Exception;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class PenjualanController extends Controller
 {
@@ -52,17 +54,37 @@ class PenjualanController extends Controller
             $response = $result->toArray();
             return response()->json($response, 200);
         } catch (ValidationException $e) {
-            return response()
-                ->json([
-                    'error' => $validator->errors(),
-                    'code' => 400
-                ], 400);
-        } catch (\Exception $e) {
-            return response()
-                ->json([
-                    'error' => $validator->errors(),
-                    'code' => 400
-                ], 400);
+            $response = [
+                'responseCode' => 400,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Bad Request ",
+                    "indonesia" => "Permintaan Tidak Valid"
+                ],
+                'error' =>  $validator->errors()
+            ];
+            return response()->json($response, 400);
+        } catch (Exception $e) {
+            $response = [
+                'responseCode' => 400,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Bad Request ",
+                    "indonesia" => "Permintaan Tidak Valid"
+                ],
+                'error' =>  $e->getMessage()
+            ];
+            return response()->json($response, 400);
+        }catch (JWTException $e) {
+            $response = [
+                'responseCode' => 401,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Access Token Invalid",
+                    "indonesia" => "Token Tidak Valid"
+                ],
+            ];
+            return response()->json($response, 401);
         }
     }
 
@@ -92,18 +114,30 @@ class PenjualanController extends Controller
                     'data' => [],
                 ];
             }
-
-        } catch (\Exception $e) {
+            return response()->json($response, 200);
+        }catch (JWTException $e) {
             $response = [
-                'responseCode' => 200,
+                'responseCode' => 401,
                 'responseMessage' => 'Failed',
                 'responseReason' => [
-                    "english" => "Invalid Token",
+                    "english" => "Access Token Invalid",
                     "indonesia" => "Token Tidak Valid"
                 ],
             ];
+            return response()->json($response, 401);
+        } catch (Exception $e) {
+            $response = [
+                'responseCode' => 400,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Bad Request ",
+                    "indonesia" => "Permintaan Tidak Valid"
+                ],
+                'error' => $e->getMessage()
+            ];
+            return response()->json($response, 400);
         }
-        return response()->json($response, 200);
+
     }
 
 

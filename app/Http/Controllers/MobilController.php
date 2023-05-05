@@ -10,36 +10,62 @@ use App\Services\MobilSerivce;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use MongoDB\Driver\Exception\Exception;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class MobilController extends Controller
 {
     public function index(MobilSerivce $mobilSerivce)
     {
-        $mobils = $mobilSerivce->getAll();
-        if (count($mobils) > 0) {
-            $data_motor = $this->arr_data($mobils);
+        try {
+            $this->user = JWTAuth::parseToken()->authenticate();
+            $mobils = $mobilSerivce->getAll();
+            if (count($mobils) > 0) {
+                $data_motor = $this->arr_data($mobils);
+                $response = [
+                    'responseCode' => 200,
+                    'responseMessage' => 'Successful',
+                    'responseReason' => [
+                        "english" => "Success",
+                        "indonesia" => "Sukses"
+                    ],
+                    'data' => $data_motor,
+                ];
+            } else {
+                $response = [
+                    'responseCode' => 200,
+                    'responseMessage' => 'Failed',
+                    'responseReason' => [
+                        "english" => "Data Not Found",
+                        "indonesia" => "Data Tidak Ditemukan"
+                    ],
+                    'data' => [],
+                ];
+            }
+
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
             $response = [
-                'responseCode' => 200,
-                'responseMessage' => 'Successful',
-                'responseReason' => [
-                    "english" => "Success",
-                    "indonesia" => "Sukses"
-                ],
-                'data' => $data_motor,
-            ];
-        } else {
-            $response = [
-                'responseCode' => 200,
+                'responseCode' => 400,
                 'responseMessage' => 'Failed',
                 'responseReason' => [
-                    "english" => "Data Not Found",
-                    "indonesia" => "Data Tidak Ditemukan"
+                    "english" => "Bad Request ",
+                    "indonesia" => "Permintaan Tidak Valid"
                 ],
-                'data' => [],
+                'error' => $e->getMessage()
             ];
+            return response()->json($response, 400);
+        } catch (JWTException $e) {
+            $response = [
+                'responseCode' => 401,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Access Token Invalid",
+                    "indonesia" => "Token Tidak Valid"
+                ],
+            ];
+            return response()->json($response, 401);
         }
 
-        return response()->json($response, 200);
     }
 
     public function store(Request $request, MobilSerivce $mobilSerivce)
@@ -58,7 +84,8 @@ class MobilController extends Controller
         ]);
 
         try {
-            $param =  $validator->validated();
+            $this->user = JWTAuth::parseToken()->authenticate();
+            $param = $validator->validated();
             $data = new KendaraanMobilRequest($request->all());
             $result = new KendaraanMobilResponse($request->all());
             $result = $mobilSerivce->storeMobil($data, $result, $request->all(), 'insert');
@@ -66,17 +93,37 @@ class MobilController extends Controller
             $response = $result->toArray();
             return response()->json($response, 200);
         } catch (ValidationException $e) {
-            return response()
-                ->json([
-                    'error' => $validator->errors(),
-                    'code' => 400
-                ], 400);
+            $response = [
+                'responseCode' => 400,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Access Token Invalid",
+                    "indonesia" => "Token Tidak Valid"
+                ],
+                'error' => $validator->errors()
+            ];
+            return response()->json($response, 400);
         } catch (Exception $e) {
-            return response()
-                ->json([
-                    'error' => $e->getMessage(),
-                    'code' => 400
-                ], 400);
+            $response = [
+                'responseCode' => 400,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Bad Request ",
+                    "indonesia" => "Permintaan Tidak Valid"
+                ],
+                'error' => $e->getMessage()
+            ];
+            return response()->json($response, 400);
+        } catch (JWTException $e) {
+            $response = [
+                'responseCode' => 401,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Access Token Invalid",
+                    "indonesia" => "Token Tidak Valid"
+                ],
+            ];
+            return response()->json($response, 401);
         }
     }
 
@@ -94,6 +141,7 @@ class MobilController extends Controller
         ]);
 
         try {
+            $this->user = JWTAuth::parseToken()->authenticate();
             $param = $validator->validated();
             $data = new KendaraanMobilRequest($request->all());
             $result = new KendaraanMobilResponse($request->all());
@@ -112,82 +160,150 @@ class MobilController extends Controller
             $response = $result->toArray();
             return response()->json($response, 200);
         } catch (ValidationException $e) {
-            return response()
-                ->json([
-                    'error' => $validator->errors(),
-                    'code' => 400
-                ], 400);
+            $response = [
+                'responseCode' => 400,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Bad Request ",
+                    "indonesia" => "Permintaan Tidak Valid"
+                ],
+                'error' => $validator->errors()
+            ];
+            return response()->json($response, 400);
         } catch (Exception $e) {
-            return response()
-                ->json([
-                    'error' => $e->getMessage(),
-                    'code' => 400
-                ], 400);
+            $response = [
+                'responseCode' => 400,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Bad Request ",
+                    "indonesia" => "Permintaan Tidak Valid"
+                ],
+                'error' => $e->getMessage()
+            ];
+            return response()->json($response, 400);
+        } catch (JWTException $e) {
+            $response = [
+                'responseCode' => 401,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Access Token Invalid",
+                    "indonesia" => "Token Tidak Valid"
+                ],
+            ];
+            return response()->json($response, 401);
         }
     }
 
     public function destroy(MobilSerivce $mobilSerivce, KendaraanService $kendaraanService, $id)
     {
-        $mobil = $mobilSerivce->findById($id);
-        if (isset($mobil)) {
-            $kendaraanService->delete($mobil->kendaraan->_id);
-            $mobilSerivce->delete($id);
+        try{
+            $this->user = JWTAuth::parseToken()->authenticate();
+            $mobil = $mobilSerivce->findById($id);
+            if (isset($mobil)) {
+                $kendaraanService->delete($mobil->kendaraan->_id);
+                $mobilSerivce->delete($id);
 
+                $response = [
+                    'responseCode' => 200,
+                    'responseMessage' => 'Successful',
+                    'responseReason' => [
+                        "english" => "Data Deleted Successfully",
+                        "indonesia" => "Data Berhasil Dihapus"
+                    ]
+                ];
+            } else {
+                $response = [
+                    'responseCode' => 200,
+                    'responseMessage' => 'Failed',
+                    'responseReason' => [
+                        "english" => "Data Not Found",
+                        "indonesia" => "Data Tidak Ditemukan"
+                    ]
+                ];
+            }
+            return response()->json($response, 200);
+        } catch (Exception $e) {
             $response = [
-                'responseCode' => 200,
-                'responseMessage' => 'Successful',
-                'responseReason' => [
-                    "english" => "Data Deleted Successfully",
-                    "indonesia" => "Data Berhasil Dihapus"
-                ]
-            ];
-        } else {
-            $response = [
-                'responseCode' => 200,
+                'responseCode' => 400,
                 'responseMessage' => 'Failed',
                 'responseReason' => [
-                    "english" => "Data Not Found",
-                    "indonesia" => "Data Tidak Ditemukan"
-                ]
+                    "english" => "Bad Request ",
+                    "indonesia" => "Permintaan Tidak Valid"
+                ],
+                'error' =>  $e->getMessage()
             ];
+            return response()->json($response, 400);
+        }catch (JWTException $e) {
+            $response = [
+                'responseCode' => 401,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Access Token Invalid",
+                    "indonesia" => "Token Tidak Valid"
+                ],
+            ];
+            return response()->json($response, 401);
         }
-        return response()->json($response, 200);
     }
 
     public function show(MobilSerivce $mobilSerivce, $id)
     {
-        $mobil = $mobilSerivce->findById($id);
-        if (isset($mobilSerivce)) {
-            $data_mobil = $this->arr_data($mobil, true);
+        try {
+            $this->user = JWTAuth::parseToken()->authenticate();
+            $mobil = $mobilSerivce->findById($id);
+            if (isset($mobilSerivce)) {
+                $data_mobil = $this->arr_data($mobil, true);
 
+                $response = [
+                    'responseCode' => 200,
+                    'responseMessage' => 'Successful',
+                    'responseReason' => [
+                        "english" => "Success",
+                        "indonesia" => "Sukses"
+                    ],
+                    'data' => $data_mobil,
+                ];
+            } else {
+                $response = [
+                    'responseCode' => 200,
+                    'responseMessage' => 'Failed',
+                    'responseReason' => [
+                        "english" => "Data Not Found",
+                        "indonesia" => "Data Tidak Ditemukan"
+                    ],
+                    'data' => [],
+                ];
+            }
+
+            return response()->json($response, 200);
+        } catch (Exception $e) {
             $response = [
-                'responseCode' => 200,
-                'responseMessage' => 'Successful',
-                'responseReason' => [
-                    "english" => "Success",
-                    "indonesia" => "Sukses"
-                ],
-                'data' => $data_mobil,
-            ];
-        } else {
-            $response = [
-                'responseCode' => 200,
+                'responseCode' => 400,
                 'responseMessage' => 'Failed',
                 'responseReason' => [
-                    "english" => "Data Not Found",
-                    "indonesia" => "Data Tidak Ditemukan"
+                    "english" => "Bad Request ",
+                    "indonesia" => "Permintaan Tidak Valid"
                 ],
-                'data' => [],
+                'error' =>  $e->getMessage()
             ];
+            return response()->json($response, 400);
+        }catch (JWTException $e) {
+            $response = [
+                'responseCode' => 401,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Access Token Invalid",
+                    "indonesia" => "Token Tidak Valid"
+                ],
+            ];
+            return response()->json($response, 401);
         }
-
-        return response()->json($response, 200);
     }
 
     public function arr_data($datas, $show = false)
     {
         $data_motor = [];
-        if ($show){
+        if ($show) {
             $data_motor[$datas->_id]['_id'] = $datas->_id;
             $data_motor[$datas->_id]['merk'] = $datas->merk;
             $data_motor[$datas->_id]['mesin'] = $datas->mesin;
@@ -201,7 +317,7 @@ class MobilController extends Controller
             } else {
                 $data_motor[$datas->_id]['kendaraan'] = [];
             }
-        }else{
+        } else {
             foreach ($datas as $item) {
                 $data_motor[$item->_id]['_id'] = $item->_id;
                 $data_motor[$item->_id]['merk'] = $item->merk;

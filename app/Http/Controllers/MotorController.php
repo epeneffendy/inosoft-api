@@ -9,37 +9,64 @@ use App\Services\MotorSerivce;
 use Illuminate\Http\Request;
 use League\Flysystem\Exception;
 use Illuminate\Validation\ValidationException;
+use JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class MotorController extends Controller
 {
+    protected $user;
+
     public function index(MotorSerivce $motorSerivce)
     {
-        $motors = $motorSerivce->getAll();
-        if (count($motors) > 0) {
-            $data_motor = $this->arr_data($motors);
+        try {
+            $this->user = JWTAuth::parseToken()->authenticate();
+            $motors = $motorSerivce->getAll();
+            if (count($motors) > 0) {
+                $data_motor = $this->arr_data($motors);
+                $response = [
+                    'responseCode' => 200,
+                    'responseMessage' => 'Successful',
+                    'responseReason' => [
+                        "english" => "Success",
+                        "indonesia" => "Sukses"
+                    ],
+                    'data' => $data_motor,
+                ];
+            } else {
+                $response = [
+                    'responseCode' => 200,
+                    'responseMessage' => 'Failed',
+                    'responseReason' => [
+                        "english" => "Data Failed to Delete",
+                        "indonesia" => "Data Gagal Dihapus"
+                    ],
+                    'data' => [],
+                ];
+            }
 
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
             $response = [
-                'responseCode' => 200,
-                'responseMessage' => 'Successful',
-                'responseReason' => [
-                    "english" => "Success",
-                    "indonesia" => "Sukses"
-                ],
-                'data' => $data_motor,
-            ];
-        } else {
-            $response = [
-                'responseCode' => 200,
+                'responseCode' => 400,
                 'responseMessage' => 'Failed',
                 'responseReason' => [
-                    "english" => "Data Failed to Delete",
-                    "indonesia" => "Data Gagal Dihapus"
+                    "english" => "Access Token Invalid",
+                    "indonesia" => "Token Tidak Valid"
                 ],
-                'data' => [],
+                'error' =>  $e->getMessage()
             ];
+            return response()->json($response, 400);
+        }catch (JWTException $e) {
+            $response = [
+                'responseCode' => 401,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Access Token Invalid",
+                    "indonesia" => "Token Tidak Valid"
+                ],
+            ];
+            return response()->json($response, 401);
         }
-
-        return response()->json($response, 200);
     }
 
     public function store(Request $request, MotorSerivce $motorSerivce)
@@ -59,25 +86,45 @@ class MotorController extends Controller
         ]);
 
         try {
-            $param = $validator->validated();
+            $validator->validated();
+            $this->user = JWTAuth::parseToken()->authenticate();
             $data = new KendaraanMotorRequest($request->all());
             $result = new KendaraanMotorResponse($request->all());
             $result = $motorSerivce->storeMotor($data, $result, $request->all(), 'insert');
-
             $response = $result->toArray();
             return response()->json($response, 200);
         } catch (ValidationException $e) {
-            return response()
-                ->json([
-                    'error' => $validator->errors(),
-                    'code' => 400
-                ], 400);
+            $response = [
+                'responseCode' => 400,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Bad Request ",
+                    "indonesia" => "Permintaan Tidak Valid"
+                ],
+                'error' =>  $validator->errors()
+            ];
+            return response()->json($response, 400);
         } catch (Exception $e) {
-            return response()
-                ->json([
-                    'error' => $e->getMessage(),
-                    'code' => 400
-                ], 400);
+            $response = [
+                'responseCode' => 400,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Bad Request ",
+                    "indonesia" => "Permintaan Tidak Valid"
+                ],
+                'error' =>  $e->getMessage()
+            ];
+            return response()->json($response, 400);
+        }catch (JWTException $e) {
+            $response = [
+                'responseCode' => 401,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Access Token Invalid",
+                    "indonesia" => "Token Tidak Valid"
+                ],
+            ];
+            return response()->json($response, 401);
         }
     }
 
@@ -97,6 +144,7 @@ class MotorController extends Controller
         ]);
 
         try {
+            $this->user = JWTAuth::parseToken()->authenticate();
             $param = $validator->validated();
             $data = new KendaraanMotorRequest($request->all());
             $result = new KendaraanMotorResponse($request->all());
@@ -115,82 +163,149 @@ class MotorController extends Controller
             $response = $result->toArray();
             return response()->json($response, 200);
         } catch (ValidationException $e) {
-            return response()
-                ->json([
-                    'error' => $validator->errors(),
-                    'code' => 400
-                ], 400);
+            $response = [
+                'responseCode' => 400,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Bad Request ",
+                    "indonesia" => "Permintaan Tidak Valid"
+                ],
+                'error' =>  $validator->errors()
+            ];
+            return response()->json($response, 400);
         } catch (Exception $e) {
-            return response()
-                ->json([
-                    'error' => $e->getMessage(),
-                    'code' => 400
-                ], 400);
+            $response = [
+                'responseCode' => 400,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Bad Request ",
+                    "indonesia" => "Permintaan Tidak Valid"
+                ],
+                'error' =>  $e->getMessage()
+            ];
+            return response()->json($response, 400);
+        }catch (JWTException $e) {
+            $response = [
+                'responseCode' => 401,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Access Token Invalid",
+                    "indonesia" => "Token Tidak Valid"
+                ],
+            ];
+            return response()->json($response, 401);
         }
     }
 
     public function destroy(MotorSerivce $motorSerivce, KendaraanService $kendaraanService, $id)
     {
-        $motor = $motorSerivce->findById($id);
-        if (isset($motor)) {
-            $kendaraanService->delete($motor->kendaraan->_id);
-            $motorSerivce->delete($id);
+        try{
+            $this->user = JWTAuth::parseToken()->authenticate();
+            $motor = $motorSerivce->findById($id);
+            if (isset($motor)) {
+                $kendaraanService->delete($motor->kendaraan->_id);
+                $motorSerivce->delete($id);
 
+                $response = [
+                    'responseCode' => 200,
+                    'responseMessage' => 'Successful',
+                    'responseReason' => [
+                        "english" => "Data Deleted Successfully",
+                        "indonesia" => "Data Berhasil Dihapus"
+                    ]
+                ];
+            } else {
+                $response = [
+                    'responseCode' => 200,
+                    'responseMessage' => 'Failed',
+                    'responseReason' => [
+                        "english" => "Data Not Found",
+                        "indonesia" => "Data Tidak Ditemukan"
+                    ]
+                ];
+            }
+            return response()->json($response, 200);
+        } catch (Exception $e) {
             $response = [
-                'responseCode' => 200,
-                'responseMessage' => 'Successful',
-                'responseReason' => [
-                    "english" => "Data Deleted Successfully",
-                    "indonesia" => "Data Berhasil Dihapus"
-                ]
-            ];
-        } else {
-            $response = [
-                'responseCode' => 200,
+                'responseCode' => 400,
                 'responseMessage' => 'Failed',
                 'responseReason' => [
-                    "english" => "Data Not Found",
-                    "indonesia" => "Data Tidak Ditemukan"
-                ]
+                    "english" => "Bad Request ",
+                    "indonesia" => "Permintaan Tidak Valid"
+                ],
+                'error' =>  $e->getMessage()
             ];
+            return response()->json($response, 400);
+        }catch (JWTException $e) {
+            $response = [
+                'responseCode' => 401,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Access Token Invalid",
+                    "indonesia" => "Token Tidak Valid"
+                ],
+            ];
+            return response()->json($response, 401);
         }
-        return response()->json($response, 200);
     }
 
     public function show(MotorSerivce $motorSerivce, $id)
     {
-        $motor = $motorSerivce->findById($id);
-        if (isset($motor)) {
-            $data_motor = $this->arr_data($motor, true);
+        try{
+            $this->user = JWTAuth::parseToken()->authenticate();
+            $motor = $motorSerivce->findById($id);
+            if (isset($motor)) {
+                $data_motor = $this->arr_data($motor, true);
 
+                $response = [
+                    'responseCode' => 200,
+                    'responseMessage' => 'Successful',
+                    'responseReason' => [
+                        "english" => "Success",
+                        "indonesia" => "Sukses"
+                    ],
+                    'data' => $data_motor,
+                ];
+            } else {
+                $response = [
+                    'responseCode' => 200,
+                    'responseMessage' => 'Failed',
+                    'responseReason' => [
+                        "english" => "Data Not Found",
+                        "indonesia" => "Data Tidak Ditemukan"
+                    ],
+                    'data' => [],
+                ];
+            }
+            return response()->json($response, 200);
+        } catch (Exception $e) {
             $response = [
-                'responseCode' => 200,
-                'responseMessage' => 'Successful',
-                'responseReason' => [
-                    "english" => "Success",
-                    "indonesia" => "Sukses"
-                ],
-                'data' => $data_motor,
-            ];
-        } else {
-            $response = [
-                'responseCode' => 200,
+                'responseCode' => 400,
                 'responseMessage' => 'Failed',
                 'responseReason' => [
-                    "english" => "Data Not Found",
-                    "indonesia" => "Data Tidak Ditemukan"
+                    "english" => "Bad Request ",
+                    "indonesia" => "Permintaan Tidak Valid"
                 ],
-                'data' => [],
+                'error' =>  $e->getMessage()
             ];
+            return response()->json($response, 400);
+        }catch (JWTException $e) {
+            $response = [
+                'responseCode' => 401,
+                'responseMessage' => 'Failed',
+                'responseReason' => [
+                    "english" => "Access Token Invalid",
+                    "indonesia" => "Token Tidak Valid"
+                ],
+            ];
+            return response()->json($response, 401);
         }
-
-        return response()->json($response, 200);
     }
 
     public function arr_data($datas, $show = false)
     {
         $data_motor = [];
-        if ($show){
+        if ($show) {
             $data_motor[$datas->_id]['_id'] = $datas->_id;
             $data_motor[$datas->_id]['merk'] = $datas->merk;
             $data_motor[$datas->_id]['mesin'] = $datas->mesin;
@@ -204,7 +319,7 @@ class MotorController extends Controller
             } else {
                 $data_motor[$datas->_id]['kendaraan'] = [];
             }
-        }else{
+        } else {
             foreach ($datas as $item) {
                 $data_motor[$item->_id]['_id'] = $item->_id;
                 $data_motor[$item->_id]['merk'] = $item->merk;
