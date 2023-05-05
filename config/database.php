@@ -38,7 +38,7 @@ return [
         'mongodb' => [
             'driver' => 'mongodb',
             'dsn' => env('DB_URI', 'mongodb://localhost:27017'),
-            'database' => 'inosoft_test',
+            'database' => env('DB_MONGO', 'inosoft_test'),
         ],
 
         'sqlite' => [
