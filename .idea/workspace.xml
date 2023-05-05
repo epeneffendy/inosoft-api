@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3e7306ea-c7d4-43da-be5c-8c16c5e1ff1d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/database.php" afterPath="$PROJECT_DIR$/config/database.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -67,22 +67,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="database.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="database.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/config/database.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="43" column="21" lean-forward="true" selection-start-line="43" selection-start-column="21" selection-end-line="43" selection-end-column="21" />
+            <state relative-caret-position="238">
+              <caret line="44" column="33" lean-forward="true" selection-start-line="44" selection-start-column="33" selection-end-line="44" selection-end-column="33" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="0">
-                <caret line="0" column="54" lean-forward="false" selection-start-line="0" selection-start-column="54" selection-end-line="0" selection-end-column="54" />
+              <first_editor relative-caret-position="289">
+                <caret line="17" column="16" lean-forward="true" selection-start-line="17" selection-start-column="16" selection-end-line="17" selection-end-column="16" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -93,8 +93,8 @@
       <file leaf-file-name=".env" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.env">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-59">
-              <caret line="21" column="19" lean-forward="true" selection-start-line="21" selection-start-column="19" selection-end-line="21" selection-end-column="19" />
+            <state relative-caret-position="587">
+              <caret line="54" column="99" lean-forward="true" selection-start-line="54" selection-start-column="7" selection-end-line="54" selection-end-column="99" />
               <folding />
             </state>
           </provider>
@@ -207,9 +207,9 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/StokKendaraanController.php" />
         <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/AuthController.php" />
-        <option value="$PROJECT_DIR$/config/database.php" />
         <option value="$PROJECT_DIR$/.env" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/config/database.php" />
       </list>
     </option>
   </component>
@@ -368,7 +368,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../laravel-8-jwt" />
-    <property name="SearchEverywhereHistoryKey" value="web&#9;FILE&#9;file://C:/xampp/htdocs/inosoft-api/routes/web.php&#10;Mobi&#9;FILE&#9;file://D:/xampp/htdocs/inosoft-api/app/Http/Controllers/MobilController.php&#10;Penjualan&#9;FILE&#9;file://D:/xampp/htdocs/inosoft-api/app/Http/Controllers/PenjualanController.php&#10;Motor&#9;FILE&#9;file://D:/xampp/htdocs/inosoft-api/app/Http/Controllers/MotorController.php&#10;we&#9;FILE&#9;file://D:/xampp/htdocs/inosoft-api/routes/web.php&#10;Mo&#9;FILE&#9;file://D:/xampp/htdocs/inosoft-api/app/Models/Motor.php&#10;Aut&#9;FILE&#9;file://D:/xampp/htdocs/inosoft-api/app/Http/Controllers/AuthController.php&#10;Moto&#9;FILE&#9;file://C:/xampp/htdocs/inosoft-api/app/Models/Motor.php&#10;MotorController&#9;FILE&#9;file://C:/xampp/htdocs/inosoft-api/app/Http/Controllers/MotorController.php&#10;Mobil&#9;FILE&#9;file://C:/xampp/htdocs/inosoft-api/app/Http/Controllers/MobilController.php&#10;Kenda&#9;null&#9;null" />
+    <property name="SearchEverywhereHistoryKey" value="data&#9;FILE&#9;file://C:/xampp/htdocs/inosoft-api/config/database.php&#10;web&#9;FILE&#9;file://C:/xampp/htdocs/inosoft-api/routes/web.php&#10;Mobi&#9;FILE&#9;file://D:/xampp/htdocs/inosoft-api/app/Http/Controllers/MobilController.php&#10;Penjualan&#9;FILE&#9;file://D:/xampp/htdocs/inosoft-api/app/Http/Controllers/PenjualanController.php&#10;Motor&#9;FILE&#9;file://D:/xampp/htdocs/inosoft-api/app/Http/Controllers/MotorController.php&#10;we&#9;FILE&#9;file://D:/xampp/htdocs/inosoft-api/routes/web.php&#10;Mo&#9;FILE&#9;file://D:/xampp/htdocs/inosoft-api/app/Models/Motor.php&#10;Aut&#9;FILE&#9;file://D:/xampp/htdocs/inosoft-api/app/Http/Controllers/AuthController.php&#10;Moto&#9;FILE&#9;file://C:/xampp/htdocs/inosoft-api/app/Models/Motor.php&#10;MotorController&#9;FILE&#9;file://C:/xampp/htdocs/inosoft-api/app/Http/Controllers/MotorController.php&#10;Mobil&#9;FILE&#9;file://C:/xampp/htdocs/inosoft-api/app/Http/Controllers/MobilController.php&#10;Kenda&#9;null&#9;null" />
     <property name="nodejs_interpreter_path" value="C:/Program Files/nodejs/node" />
     <property name="js.eslint.eslintPackage" value="" />
     <property name="js-jscs-nodeInterpreter" value="C:\Program Files\nodejs\node.exe" />
@@ -454,12 +454,12 @@
       <workItem from="1683203918959" duration="3610000" />
       <workItem from="1683209626685" duration="5675000" />
       <workItem from="1683246491944" duration="10468000" />
-      <workItem from="1683282281312" duration="6104000" />
+      <workItem from="1683282281312" duration="6288000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="71710000" />
+    <option name="totallyTimeSpent" value="71894000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -824,22 +824,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/database.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="43" column="21" lean-forward="true" selection-start-line="43" selection-start-column="21" selection-end-line="43" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.env">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-59">
-          <caret line="21" column="19" lean-forward="true" selection-start-line="21" selection-start-column="19" selection-end-line="21" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/web.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="527">
@@ -851,11 +835,27 @@
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="0">
-            <caret line="0" column="54" lean-forward="false" selection-start-line="0" selection-start-column="54" selection-end-line="0" selection-end-column="54" />
+          <first_editor relative-caret-position="289">
+            <caret line="17" column="16" lean-forward="true" selection-start-line="17" selection-start-column="16" selection-end-line="17" selection-end-column="16" />
             <folding />
           </first_editor>
           <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.env">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="587">
+          <caret line="54" column="99" lean-forward="true" selection-start-line="54" selection-start-column="7" selection-end-line="54" selection-end-column="99" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/database.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="44" column="33" lean-forward="true" selection-start-line="44" selection-start-column="33" selection-end-line="44" selection-end-column="33" />
+          <folding />
         </state>
       </provider>
     </entry>
