@@ -1,6 +1,6 @@
-<p align="center">API Laravel 8 Dengan MongoDB 4.2</p>
+<p align="center"><h1>API Laravel 8 Dengan MongoDB 4.2</h1></p>
 
-##Instalation
+## Instalation
 Laravel 8.XX menggunakan PHP versi 8.1 MongoDB 4.2
 
 1. Clone repository, bisa di download .zip atau dengan perintah git clone seperti ini
@@ -18,7 +18,7 @@ cd c:/xampp/htdocs/inosoft-api
 composer install
 ```
 
-##API
+## API
 Dokumentasi API bisa di lihat di [postman documentation](https://documenter.getpostman.com/view/2058663/2s93eX1DTb)
 
 ### Endpoint Users
@@ -29,7 +29,7 @@ Dokumentasi API bisa di lihat di [postman documentation](https://documenter.getp
 | POST   | *`…/login`*              | Login pengguna dan generate token                                                           | token       |
 | POST   | *`…/me`*                 | Menampilakn user pengguna dan di validasi dengan token                                      | token       |
 
-###Endpoint Motor
+### Endpoint Motor
 
 | Method | Path                      | Description                                                                                 | Auth        |
 |--------|---------------------------|---------------------------------------------------------------------------------------------|-------------|
@@ -39,7 +39,7 @@ Dokumentasi API bisa di lihat di [postman documentation](https://documenter.getp
 | PUT   | *`…/motor`*              | Merubah data motor                                       | token       |
 | DELETE   | *`…/motor`*              | Menghapus data motor                                       | token       |
 
-###Endpoint Mobil
+### Endpoint Mobil
 
 | Method | Path                      | Description                                                                                 | Auth        |
 |--------|---------------------------|---------------------------------------------------------------------------------------------|-------------|
@@ -49,20 +49,20 @@ Dokumentasi API bisa di lihat di [postman documentation](https://documenter.getp
 | PUT   | *`…/mobil`*              | Merubah data mobil                                       | token       |
 | DELETE   | *`…/mobil`*              | Menghapus data mobil                                       | token       |
 
-###Stok
+### Stok
 
 | Method | Path                      | Description                                                                                 | Auth        |
 |--------|---------------------------|---------------------------------------------------------------------------------------------|-------------|
 | GET   | *`…/stok-kendaraan/{type}`*               | menampilkan stok kendaraan (type: mobil/motor)                                                                     | token            |
 
-###Penjualan
+### Penjualan
 
 | Method | Path                      | Description                                                                                 | Auth        |
 |--------|---------------------------|---------------------------------------------------------------------------------------------|-------------|
 | POST   | *`…/penjualan-kendaraan`*               | Proses penjualan kendaraan mobil/motor                                                                      | token            |
 | GET   | *`…/laporan-penjualan/{col}/{value}`*               | Menampilkan laporan penjualan dengan filter kolom tanggal, type_kendaraan, merk                                                                      | token            |
 
-##Resource
+## Resource
 
 1. MongoDB Comunity Server : https://www.mongodb.com/try/download/community
 
