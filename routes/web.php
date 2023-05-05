@@ -36,4 +36,6 @@ Route::post('/penjualan-kendaraan',[\App\Http\Controllers\PenjualanController::c
 Route::get('/laporan-penjualan/{col}/{value}',[\App\Http\Controllers\PenjualanController::class, 'index']);
 
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/token', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout']);
+Route::post('/token', [AuthController::class, 'token']);
+Route::post('/me', [AuthController::class, 'me']);

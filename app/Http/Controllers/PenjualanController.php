@@ -10,9 +10,12 @@ use App\Services\MotorSerivce;
 use App\Services\PenjualanService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use JWTAuth;
 
 class PenjualanController extends Controller
 {
+    protected $user;
+
     public function store(Request $request, MotorSerivce $motorSerivce, MobilSerivce $mobilSerivce, PenjualanService $penjualanService)
     {
         $validator = validator($request->all(), [
@@ -26,6 +29,7 @@ class PenjualanController extends Controller
         ]);
 
         try {
+            $this->user = JWTAuth::parseToken()->authenticate();
             $validator->validated();
             $data = new PenjualanKendaraanRequest($request->all());
             $result = new PenjualanKendaraanResponse($request->all());
@@ -64,26 +68,39 @@ class PenjualanController extends Controller
 
     public function index(PenjualanService $penjualanService, $col, $value)
     {
-        $fetch = $penjualanService->fetchLaporan($col, $value);
-        if (count($fetch) > 0){
-            $response = [
-                'responseCode' => 200,
-                'responseMessage' => 'Successful',
-                'responseReason' => [
-                    "english" => "Success",
-                    "indonesia" => "Sukses"
-                ],
-                'data' => $fetch,
-            ];
-        }else{
+        try {
+            $this->user = JWTAuth::parseToken()->authenticate();
+            $fetch = $penjualanService->fetchLaporan($col, $value);
+            if (count($fetch) > 0) {
+                $response = [
+                    'responseCode' => 200,
+                    'responseMessage' => 'Successful',
+                    'responseReason' => [
+                        "english" => "Success",
+                        "indonesia" => "Sukses"
+                    ],
+                    'data' => $fetch,
+                ];
+            } else {
+                $response = [
+                    'responseCode' => 200,
+                    'responseMessage' => 'Failed',
+                    'responseReason' => [
+                        "english" => "Data Not Foundsss",
+                        "indonesia" => "Data Tidak Ditemukan"
+                    ],
+                    'data' => [],
+                ];
+            }
+
+        } catch (\Exception $e) {
             $response = [
                 'responseCode' => 200,
                 'responseMessage' => 'Failed',
                 'responseReason' => [
-                    "english" => "Data Not Foundsss",
-                    "indonesia" => "Data Tidak Ditemukan"
+                    "english" => "Invalid Token",
+                    "indonesia" => "Token Tidak Valid"
                 ],
-                'data' => [],
             ];
         }
         return response()->json($response, 200);
